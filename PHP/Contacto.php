@@ -9,7 +9,7 @@
 
         <!--<link href="/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
 
-        <link rel="icon" href="../Imagenes/logo.png">
+        <link rel="icon" href="../Images/logo.png">
         <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
         <link href="../CSS/carousel.css" rel="stylesheet">
 
@@ -83,7 +83,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Imagenes/user.png"></a>
+                            <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Images/user.png"></a>
                         </li>
                     </ul>
                     <form class="d-flex">
@@ -126,7 +126,7 @@
                         </div>
                         <div class="col-sm-6 d-none d-sm-block" style='height:100vh'>
                             <div class="text-center">
-                                <img src="../Imagenes/palomitas_icono.png" class="img-fluid">
+                                <img src="../Images/palomitas_icono.png" class="img-fluid">
                             </div>
                         </div>
                     </div>
