@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+
+.userImage
+{
+  width: 27px;
+  height: 27px;
+}
+
+#columna1
+{
+  background-color: rgb(214, 42, 42);
+}
+
+.featurette-divider 
+{
+  margin: 3rem 0;
+}
+
+.featurette-heading 
+{
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.05rem;
+}

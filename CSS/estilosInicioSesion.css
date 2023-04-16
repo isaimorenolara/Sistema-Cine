@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+.tituloinico
+{
+    text-decoration: none;
+}
+
+body
+{
+    height: calc(100% - 100px);
+}
