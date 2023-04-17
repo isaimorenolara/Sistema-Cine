@@ -34,7 +34,7 @@
 	{
 
 		$html.="<tr>
-                <td class='text-center'><img src='../Imagenes/user.png' width='50px' height='50px'></td>
+                <td class='text-center'><img src='../Images/user.png' width='50px' height='50px'></td>
                 <td class='text-center'>".$registro['Id_Usuario']."</td>
                 <td class='text-center'>".$registro['Nombre']."</td>
                 <td class='text-center'>".$registro['Correo_electronico']."</td>
@@ -61,7 +61,7 @@
     
 		<!--<link href="/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
 
-    <link rel="icon" href="../Imagenes/logo.png">
+    <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
 
     <title>Usuarios</title>
@@ -152,7 +152,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Imagenes/user.png"></a>
+                  <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Images/user.png"></a>
                 </li>
               </ul>
             </div>

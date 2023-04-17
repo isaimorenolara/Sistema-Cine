@@ -3,7 +3,7 @@
 <head>
 	<title>Reserva de Funciones</title>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="../../JS/reserva.js"></script>
+	<script src="C:\Users\isail\Documents\Universidad\FUNDAMENTOS DE DESARROLLO WEB\Proyecto-Cine\JS\reserva.js"></script>
 </head>
 <body>
 	<h1>Reserva de Funciones</h1>
