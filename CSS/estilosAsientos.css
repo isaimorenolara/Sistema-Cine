@@ -1,0 +1,96 @@
+.cinema-seats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.seat {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.seat.selected {
+    background-color: #A3C6C4;
+}
+
+.seat.reserved {
+    background-color: #777;
+    cursor: not-allowed;
+}
+
+.seat:nth-child(3) {
+    margin-right: 20px;
+}
+
+.seat:nth-child(4) {
+    margin-left: 20px;
+}
+
+.calendar {
+    width: 300px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc;
+}
+
+.calendar-header button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 1px;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.calendar-body .day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    background-color: #f2f2f2;
+}
+
+.calendar-body .day:hover {
+    background-color: #e6e6e6;
+}
+
+.calendar-body .day.selected {
+    background-color: #008CBA;
+    color: #fff;
+}
+
+.calendar-body .day.disabled {
+    color: #ccc;
+    pointer-events: none;
+}
