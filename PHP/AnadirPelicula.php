@@ -10,10 +10,10 @@
     
 		<!--<link href="/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
 
-    <link rel="icon" href="../Imagenes/logo.png">
+    <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
 
-    <title>Añadir</title>
+    <title>Añadir Película</title>
 
     <style>
       body 
@@ -88,6 +88,7 @@
                   <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="AnadirPelicula.php">Añadir Pelicula</a></li>
                     <li><a class="dropdown-item" href="AnadirFunciones.php">Añadir Función</a></li>
+                    <li><a class="dropdown-item" href="AnadirSala.php">Añadir Sala</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -101,7 +102,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Imagenes/user.png"></a>
+                  <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Images/user.png"></a>
                 </li>
               </ul>
             </div>

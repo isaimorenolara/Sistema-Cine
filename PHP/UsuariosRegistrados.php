@@ -64,7 +64,7 @@
     <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
 
-    <title>Usuarios</title>
+    <title>Lista de Usuarios</title>
 
     <style>
       body 
@@ -149,6 +149,7 @@
                     <li><a class="dropdown-item" href="Lista.php">Lista de Pelicula</a></li>
                     <li><a class="dropdown-item" href="FuncionesRegistradas.php">Lista de Funciones</a></li>
                     <li><a class="dropdown-item" href="UsuariosRegistrados.php">Lista de Usuarios</a></li>
+                    <li><a class="dropdown-item" href="SalasRegistradas.php">Lista de Salas</a></li>
                   </ul>
                 </li>
                 <li class="nav-item">

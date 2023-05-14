@@ -13,7 +13,7 @@
 		echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 	}
 
-	$res = $mysqli->query("select * from funciones f, peliculas p where f.Id_Pelicula = p.Id_Pelicula ") or 
+	$res = $mysqli->query("select * from funciones f, peliculas p, salas s where f.Id_Pelicula = p.Id_Pelicula and f.id_sala = s.id_sala") or 
 				die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
 	$Nregistros=$res->num_rows;
 	$html="";
@@ -27,6 +27,7 @@
                   <th>Descripción</th>
                   <th width='100px'>Hora</th>
                   <th width='100px'>Fecha</th>
+                  <th width='100px'>Sala</th>
                   <th width='100px'>Editar</th>
               </tr>
       ";
@@ -42,6 +43,7 @@
                 <td class='text-justify'>".$registro['Descripcion']."</td>
                 <td width='100px' class='text-center'>".$registro['Hora_inicio']."</td>
                 <td width='100px' class='text-center'>".$registro['Fecha']."</td>
+                <td width='100px' class='text-center'>".$registro['tipo_sala']."</td>
                 <td width='100px' class='text-center'><button type='button' class='btn btn-danger' onclick='location.href=\"BorrarFuncion.php?Id_Funcion=".$registro['Id_Funcion']."\"'>Eliminar</button></td>   
             </tr>";
 		$cont++;
@@ -68,7 +70,7 @@
     <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
 
-    <title>Funciones (Lista)</title>
+    <title>Lista de Funciones</title>
 
     <style>
       body 
@@ -153,6 +155,7 @@
                     <li><a class="dropdown-item" href="Lista.php">Lista de Pelicula</a></li>
                     <li><a class="dropdown-item" href="FuncionesRegistradas.php">Lista de Funciones</a></li>
                     <li><a class="dropdown-item" href="UsuariosRegistrados.php">Lista de Usuarios</a></li>
+                    <li><a class="dropdown-item" href="SalasRegistradas.php">Lista de Salas</a></li>
                   </ul>
                 </li>
                 <li class="nav-item">

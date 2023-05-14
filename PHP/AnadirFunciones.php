@@ -17,7 +17,7 @@
     <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
 
-    <title>Funciones</title>
+    <title>Añadir Función</title>
 
     <style>
       body 
@@ -92,6 +92,7 @@
                   <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="AnadirPelicula.php">Añadir Pelicula</a></li>
                     <li><a class="dropdown-item" href="AnadirFunciones.php">Añadir Función</a></li>
+                    <li><a class="dropdown-item" href="AnadirSala.php">Añadir Sala</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -143,6 +144,30 @@
                   {
                       echo "<option hidden disabled selected value>&#160;</option>".
                           "<option value=\"".$registro['Id_Pelicula']."\">".$registro['Nombre']."</option>";
+                  }
+                  $res->free();
+                  $mysqli->close();
+                ?>
+              </select>
+            </div>
+            <div class="form-outline mb-4">
+              <label class="form-label">Sala</label>
+              <select class="form-control form-control-label" name="idsala" required="required">
+                <?php
+                  $mysqli = new mysqli("localhost", "root", "", "cine2");//"127.0.0.1"
+                  $acentos = $mysqli->query("SET NAMES 'utf8'");
+
+                  if ($mysqli->connect_errno) 
+                  {
+                      echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                  }
+                  
+                  $res = $mysqli->query("select * from salas") or 
+                      die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+                  while($registro = $res->fetch_assoc())
+                  {
+                      echo "<option hidden disabled selected value>&#160;</option>".
+                          "<option value=\"".$registro['id_sala']."\">".$registro['tipo_sala']."</option>";
                   }
                   $res->free();
                   $mysqli->close();

@@ -8,48 +8,39 @@
   $mysqli = new mysqli("localhost", "root", "", "cine2");
   $acentos = $mysqli->query("SET NAMES 'utf8'"); 
 
-  if ($mysqli->connect_errno) 
-  {
-		echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-	}
+    if ($mysqli->connect_errno) 
+    {
+        echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+    }
 
-	$res = $mysqli->query("select * from peliculas") or 
-				die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
-	$Nregistros=$res->num_rows;
-	$html="";
-	$contador=0;
+    $res = $mysqli->query("select * from salas") or 
+                die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+    $Nregistros=$res->num_rows;
+    $html="";
+    $contador=0;
 
   $html.="<div class='table-responsive'>
           <table class='table table-striped'>
               <tr class='text-center'>
-                  <th>Poster</th>
-                  <th>Nombre</th>
-                  <th>Duración</th>
-                  <th>Año de estreno</th>
-                  <th>Descripción</th>
-                  <th>Director</th>
-                  <th>Idioma</th>
-                  <th>Rating</th>
-                  <th colspan='2'>Editar</th>
+                  <th>Id Sala</th>
+                  <th>Tipo de Sala</th>
+                  <th>No. Asientos</th>
+                  <th>No. Filas</th>
+                  <th>No. Asientos x Fila</th>
+                  <th>Eliminar</th>
               </tr>
       ";
 
   while($registro = $res->fetch_assoc())
 	{
-		$tipo=$registro['tipoimagen'];
-		$imagen=base64_encode($registro['Poster']);
 
 		$html.="<tr>
-                <td class='text-center'><img class='rounded img-fluid' src='data:$tipo;base64,$imagen' alt='".$registro['Nombre']."'></td>
-                <td class='text-center'>".$registro['Nombre']."</td>
-                <td class='text-center'>".$registro['Duracion']." min. </td>
-                <td class='text-center'>".$registro['Anio_estreno']."</td>
-                <td class='text-justify'>".$registro['Descripcion']."</td>
-                <td class='text-center'>".$registro['Director']."</td>
-                <td class='text-center'>".$registro['Idioma']."</td>
-                <td class='text-center'>".$registro['Rating']."/5</td>
-                <td class='text-center'><button type='button' class='btn btn-success' onclick='muestraCaja(".$registro['Id_Pelicula'].")'>Modificar</button></td>
-                <td class='text-center'><button type='button' class='btn btn-danger' onclick='location.href=\"BorrarPelicula.php?Id_Pelicula=".$registro['Id_Pelicula']."\"'>Eliminar</button></td>
+                <td class='text-center'>".$registro['id_sala']."</td>
+                <td class='text-center'>".$registro['tipo_sala']."</td>
+                <td class='text-center'>".$registro['numero_asientos']."</td>
+                <td class='text-center'>".$registro['filas']."</td>
+                <td class='text-center'>".$registro['asientosxfila']."</td>
+                <td class='text-center'><button type='button' class='btn btn-danger' onclick='location.href=\"BorrarSala.php?id_sala=".$registro['id_sala']."\"'>Eliminar</button></td>
             </tr>";
 		$cont++;
 		$contador++;
@@ -75,7 +66,7 @@
     <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
 
-    <title>Lista de Peliculas</title>
+    <title>Lista de Salas</title>
 
     <style>
       body 
@@ -117,11 +108,6 @@
         letter-spacing: -.05rem;
       }
 
-      #frmModificar
-      {
-          display: none;
-          visibility: hidden;
-      }
     </style>
 
     <script src="../JS/funcionesLista.js"></script>
@@ -179,72 +165,7 @@
 
       <main role="main">
         <div class="container marketing">
-          <div id="frmModificar">
-            <h2>Modificar película</h2>
-            <form action="ActualizarPelicula.php" method="post" enctype="multipart/form-data">
-              <div class="form-outline mb-4">
-                <label class="form-label">Nombre</label>
-                <input type="text" class="form-control form-control-label" name="nombrePelicula" required="required">
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Subir Poster</label><br>
-                <input type="file" class="form-control-file form-control-label" name="posterPelicula" required="required">
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Duración (min.)</label>
-                <input type="number" class="form-control form-control-label" name="duracionPelicula" required="required">
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Año de estreno</label>
-                <input type="number" class="form-control form-control-label" name="añoPelicula" required="required">
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Género</label>
-                <select class="form-control form-control-label" name="generoPelicula" required="required">
-                  <option value="Accion">Accion</option>
-                  <option value="Ciencia Ficcion">Ciencia Ficcion</option>
-                  <option value="Drama">Drama</option>
-                  <option value="Fantasia">Fantasia</option>
-                  <option value="Terror">Terror</option>
-                  <option value="Suspenso">Suspenso</option>
-                  <option value="Animacion">Animacion</option>
-                  <option value="Crimen">Crimen</option>
-                  <option value="Comedia">Comedia</option>
-                  <option value="Musical">Musical</option>
-                  <option value="Romance">Romance</option>
-                </select>
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Descripción</label>
-                <textarea class="form-control form-control-label" rows="3" name="descripcionPelicula" required="required"></textarea>
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Director</label>
-                <input type="text" class="form-control form-control-label" name="directorPelicula" required="required">
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Idioma</label>
-                <select multiple class="form-select form-select-label" size="2" name="idiomaPelicula" required="required" multiple>
-                  <option value="Español">Español</option>
-                  <option value="Ingles">Ingles</option>
-                </select>
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Rating</label>
-                <input type="number" class="form-control form-control-label" name="ratingPelicula" step=0.1 required="required" min="1" max="5">
-              </div>
-              <div class="form-outline mb-4">
-                <label class="form-label">Trailer (url)</label>
-                <input type="url" class="form-control form-control-label" name="trailerPelicula" required="required">
-              </div>
-              <div class="form-outline mb-4">
-                <input type="hidden" id="Id_Pelicula" name="Id_Pelicula">
-                <button type="submit" class="btn btn-lg btn-block btn-danger mx-3">Modificar</button>
-                <button type="reset" class="btn btn-lg btn-block btn-outline-danger">Limpiar</button>
-              </div>
-            </form>
-          </div>
-          <h2>Lista de películas en la Base de Datos</h2>
+          <h2>Lista de salas en la Base de Datos</h2>
           <br>
           <?= $html?>
           <hr class="featurette-divider">

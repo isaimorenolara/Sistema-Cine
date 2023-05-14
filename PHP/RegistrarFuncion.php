@@ -1,7 +1,7 @@
 <?php
     extract($_REQUEST);
     
-    $query = "insert into funciones (Hora_inicio,Fecha,Id_Pelicula) values ('$hora','$fecha','$idpelicula')";
+    $query = "insert into funciones (Hora_inicio,Fecha,Id_Pelicula,id_sala) values ('$hora','$fecha','$idpelicula',$idsala)";
 
     $mysqli = new mysqli("localhost", "root", "", "cine2");//"127.0.0.1"
     if ($mysqli->connect_errno) {
