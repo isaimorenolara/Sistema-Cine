@@ -16,14 +16,14 @@
 		$Nregistros = $res->num_rows;
 
 		if ($Nregistros == 1) {
-			// $registro = $res->fetch_assoc();
-			// echo "Id_Usuario: ".$registro['Id_Usuario'].
-            //     "<br> Correo: ".$registro['Correo_electronico'].
-            //     "<br> Nombre: ".$registro['Nombre'];
 			$registro = $res->fetch_assoc();
-			$_SESSION['usuario'] = $registro['Nombre'];
-			$_SESSION['id_usuario'] = $registro['Id_Usuario'];
-			header("Location: http://localhost/pruebaCine/PHP/EditaPerfil.php");
+			echo "Id_Usuario: ".$registro['Id_Usuario'].
+                "<br> Correo: ".$registro['Correo_electronico'].
+                "<br> Nombre: ".$registro['Nombre'];
+			// $registro = $res->fetch_assoc();
+			// $_SESSION['usuario'] = $registro['Nombre'];
+			// $_SESSION['id_usuario'] = $registro['Id_Usuario'];
+			// header("Location: http://localhost/pruebaCine/PHP/EditaPerfil.php");
 			exit();
 		} else {
 			header("Location: http://localhost/pruebaCine/PHP/InicioSesion.php?error=1");

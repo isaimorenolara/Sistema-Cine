@@ -38,11 +38,11 @@
               <h2>Iniciar Sesión</h2>
 
               <?php
-              if (isset($_GET['error']) && $_GET['error'] == 1) {
-                echo '<div class="alert alert-danger" role="alert">
-                            Contraseña incorrecta
-                          </div>';
-              }
+                if (isset($_GET['error']) && $_GET['error'] == 1) {
+                  echo '<div class="alert alert-danger" role="alert">
+                              Contraseña incorrecta
+                            </div>';
+                }
               ?>
 
               <div class="form-outline mb-4">

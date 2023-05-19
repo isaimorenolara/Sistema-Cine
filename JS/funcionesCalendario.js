@@ -10,6 +10,17 @@ function generateCalendar() {
   // Limpiamos el contenido del cuerpo del calendario
   calendarBody.innerHTML = '';
 
+  // Creamos los nombres de los días de la semana
+  const weekDays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+  // Creamos las celdas de los días de la semana
+  for (let i = 0; i < weekDays.length; i++) {
+    const cell = document.createElement('div');
+    cell.classList.add('day');
+    cell.textContent = weekDays[i];
+    calendarBody.appendChild(cell);
+  }
+
   // Obtenemos el primer día del mes actual y el último día del mes actual
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
