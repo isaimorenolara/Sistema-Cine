@@ -124,10 +124,12 @@
     </footer>
 
     <script>
-        const seats = document.querySelectorAll('.row .seat');
-        const asientosSeleccionados = document.querySelector('.asientos');
-
+        
         function asientos(seat) {
+            
+            const seats = document.querySelectorAll('.row .seat');
+            const asientosSeleccionados = document.querySelector('.asientos');
+
             if (!seat.classList.contains('reserved')) {
                 seat.classList.toggle('selected');
                 console.log(`Asiento ${seat.textContent} ${seat.classList.contains('selected') ? 'seleccionado' : 'deseleccionado'}`);

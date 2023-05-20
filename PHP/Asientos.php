@@ -80,10 +80,10 @@
     </header>
 
     <main role="main">
-        <!-- <div class="container marketing"> -->
-            <!-- <div class="row mb-3"> -->
-                <!-- <div class="col-sm-4"> -->
-                    <!-- <div class="row align-items-center"> -->
+        <div class="container marketing">
+            <div class="row mb-3">
+                <div class="col-sm-4">
+
                         <div class="calendar">
                             <div class="calendar-header">
                                 <button class="prev-btn">&lt;</button>
@@ -100,8 +100,7 @@
                                 <div class="day">Sábado</div>
                             </div>
                         </div>
-                    <!-- </div> -->
-                <!-- </div> -->
+                </div>
                 <!-- <div class="col-sm-4">
                     <div class="row align-items-center">
                         <div class="cinema-seats">
@@ -147,9 +146,9 @@
                     Asientos seleccionados:
                     <br>
                 </div> -->
-            <!-- </div> -->
+            </div>
             <hr class="featurette-divider">
-        <!-- </div> -->
+        </div>
     </main>
 
     <footer class="container">

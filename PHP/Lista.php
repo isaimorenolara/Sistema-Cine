@@ -155,6 +155,7 @@
                   <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="AnadirPelicula.php">Añadir Pelicula</a></li>
                     <li><a class="dropdown-item" href="AnadirFunciones.php">Añadir Función</a></li>
+                    <li><a class="dropdown-item" href="AnadirSala.php">Añadir Sala</a></li>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -247,6 +248,11 @@
           <h2>Lista de películas en la Base de Datos</h2>
           <br>
           <?= $html?>
+          <nav class="navbar">
+            <a class="navbar-brand text-danger" href="ReportePeliculas.php">
+              <button class="btn btn-danger">Descargar Reporte de Películas</button>
+            </a>
+          </nav>
           <hr class="featurette-divider">
         </div>
       </main>
