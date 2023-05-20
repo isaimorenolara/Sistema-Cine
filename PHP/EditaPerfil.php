@@ -1,44 +1,45 @@
 <?php
 
-	session_start();
+session_start();
 
-	// Verifica si la sesión está activa
-	if (isset($_SESSION['id'])) {
-		$id = $_SESSION['id'];
-	} else {
-		// Redirige al archivo de inicio de sesión si la sesión no está activa
-		header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
-		exit();
-	}
+// Verifica si la sesión está activa
+if (isset($_SESSION['id'])) {
+	$id = $_SESSION['id'];
+} else {
+	// Redirige al archivo de inicio de sesión si la sesión no está activa
+	header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+	exit();
+}
 
-	$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+$acentos = $mysqli->query("SET NAMES 'utf8'");
 
-	if ($mysqli->connect_errno)
-		echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+if ($mysqli->connect_errno)
+	echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
-	$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
-	$resultado = $mysqli->query($query) or
-		die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
+$resultado = $mysqli->query($query) or
+	die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
 
-	// Verifica si se encontraron resultados
-	if (mysqli_num_rows($resultado) > 0) {
-		// Obtiene los datos del usuario
-		$row = mysqli_fetch_assoc($resultado);
-		$nombre = $row['Nombre'];
-		$email = $row['Correo_electronico'];
-	} else {
-		echo "No se encontró ningún usuario con ese ID.";
-	}
+// Verifica si se encontraron resultados
+if (mysqli_num_rows($resultado) > 0) {
+	// Obtiene los datos del usuario
+	$row = mysqli_fetch_assoc($resultado);
+	$nombre = $row['Nombre'];
+	$email = $row['Correo_electronico'];
+} else {
+	echo "No se encontró ningún usuario con ese ID.";
+}
 
-	// Cierra la sesión y redirige al archivo de inicio
-	if (isset($_GET['logout'])) {
-		session_destroy();
-		header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
-		exit();
-	}
+// Cierra la sesión y redirige al archivo de inicio
+if (isset($_GET['logout'])) {
+	session_destroy();
+	header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+	exit();
+}
 
-	// Cierra la conexión a la base de datos
-	$mysqli->close();
+// Cierra la conexión a la base de datos
+$mysqli->close();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -124,6 +125,32 @@
 	</header>
 
 	<main role="main">
+		<section class="vh-75" style="background-color: #D5D5D5;">
+			<div class="container py-5 h-100">
+				<div class="row d-flex justify-content-center align-items-center h-100">
+					<div class="col col-md-9 col-lg-7 col-xl-5">
+						<div class="card" style="border-radius: 15px;">
+							<div class="card-body p-4">
+								<div class="d-flex text-black">
+									<div class="flex-shrink-0">
+										<img src="../Images/user.png" alt="<?php echo $nombre; ?>" class="img-fluid">
+									</div>
+									<div class="flex-grow-1 ms-3">
+										<h5 class="mb-1"><?php echo $nombre; ?></h5>
+										<p class="mb-2 pb-1" style="color: #2b2a2a;"><?php echo $email; ?></p>
+										<div class="d-flex pt-1">
+											<a href="?logout=true">
+												<button type="button" class="btn btn-danger">Cerrar Sesión</button>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 		<div class="container marketing align-items-center mt-5">
 			<h2>Editar Perfil</h2>
 			<form action="ActualizarPerfil.php" method="post" enctype="multipart/form-data">
@@ -140,15 +167,6 @@
 					<button type="submit" class="btn btn-danger">Actualizar</button>
 				</div>
 			</form>
-			<?php
-			echo "<b>Nombre:</b> $nombre<br>";
-			echo "<b>Email:</b> $email<br>";
-			?>
-			<div class="form-outline mb-4">
-				<a class="nav-link" href="?logout=true">
-					<button class="btn btn-danger">Cerrar sesión</button>
-				</a>
-			</div>
 			<hr class="featurette-divider">
 		</div>
 		<footer class="container">
