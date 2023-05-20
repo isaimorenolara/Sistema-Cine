@@ -15,6 +15,7 @@
   <link rel="icon" href="../Images/logo.png">
   <link href="../CSS/estilosInicioSesion.css" rel="stylesheet" type="text/css">
   <script src="../JS/funcionesInicioSesion.js"></script>
+  <script src="../JS/funcionesVerifica.js"></script>
 
   <title>Inicio Sesión</title>
 
@@ -34,15 +35,15 @@
           <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
 
             <!-- <form style="width: 23rem;" action="VerificaSesion.php" method="post" onsubmit="return revisionSesion();"> -->
-            <form style="width: 23rem;" action="VerificaSesion.php" method="post">
+            <form style="width: 23rem;" action="VerificaSesion.php" method="post" onsubmit="return revisionJS();">
               <h2>Iniciar Sesión</h2>
 
               <?php
-                if (isset($_GET['error']) && $_GET['error'] == 1) {
-                  echo '<div class="alert alert-danger" role="alert">
-                              Contraseña incorrecta
-                            </div>';
-                }
+                // if (isset($_GET['error']) && $_GET['error'] == 1) {
+                //   echo '<div class="alert alert-danger" role="alert">
+                //               Contraseña incorrecta
+                //             </div>';
+                // }
               ?>
 
               <div class="form-outline mb-4">

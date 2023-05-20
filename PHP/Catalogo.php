@@ -93,10 +93,10 @@
                   <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Images/user.png"></a>
                 </li>
               </ul>
-              <form class="d-flex">
+              <!-- <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
                 <button class="btn btn-danger" type="submit">Buscar</button>
-              </form>
+              </form> -->
             </div>
           </div>
         </nav>
