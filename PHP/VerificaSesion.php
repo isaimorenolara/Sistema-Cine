@@ -29,6 +29,7 @@
 
 			$_SESSION['correo'] = $registro['Correo_electronico'];
 			$_SESSION['rol'] = $registro['rol'];
+			$_SESSION['id'] = $registro['Id_Usuario'];
 
 			switch($_SESSION['rol']){
 				case 'Administrador':
@@ -36,11 +37,11 @@
 					exit();
 					break;
 				case 'Cliente':	
-					header("Location: http://localhost/pruebaCine/PHP/Inicio.php");
+					header("Location: http://localhost/pruebaCine/PHP/Inicio.php?id=".$_SESSION['id']);
 					exit();
 					break;
 				default:
-					die("Error, cominuquese con el administrador del sistema.");
+					die("Error, cominíquese con el administrador del sistema.");
 					break;
 			}
 

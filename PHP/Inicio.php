@@ -1,3 +1,16 @@
+<?php
+  session_start();
+
+	// Verifica si la sesión está activa
+	if (isset($_SESSION['id'])) {
+		$id = $_SESSION['id'];
+	} else {
+		// Redirige al archivo de inicio de sesión si la sesión no está activa
+		header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+		exit();
+	}
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -35,10 +48,12 @@
       {
         filter: brightness(150%);
       }
+      
       .cajaPeliculas
       {
         backdrop-filter: blur(10px);
         background-color: rgba(255, 255, 255, 0.232); 
+        padding: 10px; 
       }
     </style>
 
@@ -55,7 +70,7 @@
           <div class="collapse navbar-collapse" id="navbarDropdownMenuLink">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="Inicio.php">Inicio</a>
+                <a class="nav-link" aria-current="page" href="Inicio.php?id=<?php echo $_SESSION['id']; ?>">Inicio</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="Promociones.html">Promociones</a>
@@ -70,8 +85,8 @@
                 </ul>
               </li>
               <li class="nav-item">
-                  <a class="nav-link" href="EditaPerfil.php"><img class="userImage" src="../Images/user.png"></a>
-                </li>
+                  <a class="nav-link" href="EditaPerfil.php?id=<?php echo $_SESSION['id']; ?>"><img class="userImage" src="../Images/user.png"></a>
+              </li>
             </ul>
           </div>
         </div>
