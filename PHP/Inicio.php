@@ -70,10 +70,13 @@
           <div class="collapse navbar-collapse" id="navbarDropdownMenuLink">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="Inicio.php?id=<?php echo $_SESSION['id']; ?>">Inicio</a>
+                <a class="nav-link active" aria-current="page" href="Inicio.php?id=<?php echo $_SESSION['id']; ?>">Inicio</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="Promociones.html">Promociones</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="Reserva.php?id=<?php echo $_SESSION['id']; ?>">Reserva</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

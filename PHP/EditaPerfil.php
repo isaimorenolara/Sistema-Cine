@@ -1,45 +1,45 @@
 <?php
 
-session_start();
+	session_start();
 
-// Verifica si la sesión está activa
-if (isset($_SESSION['id'])) {
-	$id = $_SESSION['id'];
-} else {
-	// Redirige al archivo de inicio de sesión si la sesión no está activa
-	header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
-	exit();
-}
+	// Verifica si la sesión está activa
+	if (isset($_SESSION['id'])) {
+		$id = $_SESSION['id'];
+	} else {
+		// Redirige al archivo de inicio de sesión si la sesión no está activa
+		header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+		exit();
+	}
 
-$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
-$acentos = $mysqli->query("SET NAMES 'utf8'");
+	$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+	$acentos = $mysqli->query("SET NAMES 'utf8'");
 
-if ($mysqli->connect_errno)
-	echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+	if ($mysqli->connect_errno)
+		echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
-$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
-$resultado = $mysqli->query($query) or
-	die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+	$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
+	$resultado = $mysqli->query($query) or
+		die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
 
-// Verifica si se encontraron resultados
-if (mysqli_num_rows($resultado) > 0) {
-	// Obtiene los datos del usuario
-	$row = mysqli_fetch_assoc($resultado);
-	$nombre = $row['Nombre'];
-	$email = $row['Correo_electronico'];
-} else {
-	echo "No se encontró ningún usuario con ese ID.";
-}
+	// Verifica si se encontraron resultados
+	if (mysqli_num_rows($resultado) > 0) {
+		// Obtiene los datos del usuario
+		$row = mysqli_fetch_assoc($resultado);
+		$nombre = $row['Nombre'];
+		$email = $row['Correo_electronico'];
+	} else {
+		echo "No se encontró ningún usuario con ese ID.";
+	}
 
-// Cierra la sesión y redirige al archivo de inicio
-if (isset($_GET['logout'])) {
-	session_destroy();
-	header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
-	exit();
-}
+	// Cierra la sesión y redirige al archivo de inicio
+	if (isset($_GET['logout'])) {
+		session_destroy();
+		header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+		exit();
+	}
 
-// Cierra la conexión a la base de datos
-$mysqli->close();
+	// Cierra la conexión a la base de datos
+	$mysqli->close();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -87,7 +87,7 @@ $mysqli->close();
 		}
 	</style>
 
-	<title>Inicio</title>
+	<title>Perfil</title>
 </head>
 
 <body>
@@ -106,6 +106,9 @@ $mysqli->close();
 						<li class="nav-item">
 							<a class="nav-link" href="Promociones.html">Promociones</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link" aria-current="page" href="Reserva.php?id=<?php echo $_SESSION['id']; ?>">Reserva</a>
+						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Más
@@ -116,7 +119,7 @@ $mysqli->close();
 							</ul>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link active" href="InicioSesion.php"><img class="userImage" src="../Images/user.png"></a>
+							<a class="nav-link" href="EditaPerfil.php?id=<?php echo $_SESSION['id']; ?>"><img class="userImage" src="../Images/user.png"></a>
 						</li>
 					</ul>
 				</div>
