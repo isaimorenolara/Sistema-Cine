@@ -1,38 +1,37 @@
 <?php
+    session_start();
 
-session_start();
+    // Verifica si la sesión está activa
+    if (isset($_SESSION['id'])) {
+        $id = $_SESSION['id'];
+    } else {
+        // Redirige al archivo de inicio de sesión si la sesión no está activa
+        header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+        exit();
+    }
 
-// Verifica si la sesión está activa
-if (isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
-} else {
-    // Redirige al archivo de inicio de sesión si la sesión no está activa
-    header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
-    exit();
-}
+    $mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+    $acentos = $mysqli->query("SET NAMES 'utf8'");
 
-$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
-$acentos = $mysqli->query("SET NAMES 'utf8'");
+    if ($mysqli->connect_errno)
+        echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
-if ($mysqli->connect_errno)
-    echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+    $query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
+    $resultado = $mysqli->query($query) or
+        die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
 
-$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
-$resultado = $mysqli->query($query) or
-    die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+    // Verifica si se encontraron resultados
+    if (mysqli_num_rows($resultado) > 0) {
+        // Obtiene los datos del usuario
+        $row = mysqli_fetch_assoc($resultado);
+        $nombre = $row['Nombre'];
+        $email = $row['Correo_electronico'];
+    } else {
+        echo "No se encontró ningún usuario con ese ID.";
+    }
 
-// Verifica si se encontraron resultados
-if (mysqli_num_rows($resultado) > 0) {
-    // Obtiene los datos del usuario
-    $row = mysqli_fetch_assoc($resultado);
-    $nombre = $row['Nombre'];
-    $email = $row['Correo_electronico'];
-} else {
-    echo "No se encontró ningún usuario con ese ID.";
-}
-
-// Cierra la conexión a la base de datos
-$mysqli->close();
+    // Cierra la conexión a la base de datos
+    $mysqli->close();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -52,6 +51,7 @@ $mysqli->close();
     <link href="../CSS/carousel.css" rel="stylesheet">
 
     <script src="../JS/funcionesInicio.js"></script>
+    <script src="../JS/funcionesAsientos2.js"></script>
 
     <style>
         .bd-placeholder-img {
@@ -167,8 +167,38 @@ $mysqli->close();
                         <option value="PayPal credito">PayPal credito</option>
                     </select>
                 </div>
-                <input type="hidden" id="id" name="id" value="<?php echo $_GET['id']; ?>">
                 <div class="form-outline mb-4">
+                    <label class="form-label">Sala</label>
+                    <select class="form-select" name="sala" required="required" onchange="limpiarAsientos(); mostrarSala(this.value)">
+                        <?php
+                        $mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+                        $acentos = $mysqli->query("SET NAMES 'utf8'");
+
+                        if ($mysqli->connect_errno) {
+                            echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+                        }
+
+                        $res = $mysqli->query("select * from salas") or
+                            die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+                        while ($registro = $res->fetch_assoc()) {
+                            echo "<option hidden disabled selected value>&#160;</option>" .
+                                "<option value=\"" . $registro['id_sala'] . "\">" . $registro['tipo_sala'] . " (" . $registro['asientosxfila'] . " asientos) " . "</option>";
+                        }
+                        $res->free();
+                        $mysqli->close();
+                        ?>
+                    </select>
+                </div>
+                <!-- Visualización de los asientos -->
+                <div id="asientos-container" class="contenedorAsientos">
+                    <!-- Aquí se creará la visualización de los asientos-->
+                </div>
+                <div id="asientos" class="asientos">
+                    Asiento seleccionado:
+                    <br>
+                </div>
+                <input type="hidden" id="id" name="id" value="<?php echo $_GET['id']; ?>">
+                <div class="form-outline mt-4 mb-4">
                     <button type="submit" class="btn btn-danger">Reservar</button>
                 </div>
             </form>
@@ -178,6 +208,30 @@ $mysqli->close();
             <p class="float-right"><a href="#" class="link-danger">Volver al inicio</a></p>
             <p>&copy; 2022 Company, Inc. &middot; <a href="#" class="link-danger">Privacidad</a> &middot; <a href="#" class="link-danger">Condiciones</a></p>
         </footer>
+        <script>
+            function asientos(seat) {
+
+                const seats = document.querySelectorAll('.row .seat');
+                const asientosSeleccionados = document.querySelector('.asientos');
+
+                if (!seat.classList.contains('reserved')) {
+                    seat.classList.toggle('selected');
+                    console.log(`Asiento ${seat.textContent} ${seat.classList.contains('selected') ? 'seleccionado' : 'deseleccionado'}`);
+
+                    // Agregamos el asiento seleccionado al div
+                    if (seat.classList.contains('selected')) {
+                        asientosSeleccionados.innerHTML += ` ${seat.textContent}`;
+                    } else {
+                        asientosSeleccionados.innerHTML = asientosSeleccionados.innerHTML.replace(` ${seat.textContent}`, '');
+                    }
+                }
+            }
+
+            function limpiarAsientos() {
+                const asientosSeleccionados = document.querySelector('.asientos');
+                asientosSeleccionados.innerHTML = 'Asientos seleccionados:<br>';
+            }
+        </script>
     </main>
 </body>
 
