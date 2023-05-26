@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // Verifica si la sesión está activa
@@ -9,15 +8,6 @@ if (isset($_SESSION['id'])) {
     // Redirige al archivo de inicio de sesión si la sesión no está activa
     header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
     exit();
-}
-
-if (isset($_GET['success'])) {
-    if ($_GET['success'] == 'true') {
-        echo '<div class="alert alert-success" role="alert">El mensaje ha sido enviado exitosamente.</div>';
-    } else {
-        $error = urldecode($_GET['error']);
-        echo '<div class="alert alert-danger" role="alert">Ha ocurrido un error al enviar el mensaje: ' . $error . '</div>';
-    }
 }
 ?>
 
@@ -35,7 +25,9 @@ if (isset($_GET['success'])) {
 
     <link rel="icon" href="../Images/logo.png">
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
-    <link href="../CSS/carousel.css" rel="stylesheet">
+    <script src="../JS/funcionesPromociones.js"></script>
+
+    <title>Promociones</title>
 
     <style>
         .userImage:hover {
@@ -58,23 +50,25 @@ if (isset($_GET['success'])) {
             letter-spacing: -.05rem;
         }
 
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+        .card {
+            border-radius: 4px;
+            background: #fff;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+            cursor: pointer;
+            border-radius: 10px;
+            width: auto;
+            margin: 15px;
         }
 
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+        .card img {
+            border-radius: 10px 10px 0px 0px;
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
         }
     </style>
-
-    <title>Contacto</title>
 </head>
 
 <body>
@@ -91,7 +85,7 @@ if (isset($_GET['success'])) {
                             <a class="nav-link" aria-current="page" href="Inicio.php?id=<?php echo $_SESSION['id']; ?>">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="Promociones.php?id=<?php echo $_SESSION['id']; ?>">Promociones</a>
+                            <a class="nav-link active" href="Promociones.php?id=<?php echo $_SESSION['id']; ?>">Promociones</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="Peliculas.php?id=<?php echo $_SESSION['id']; ?>">Películas</a>
@@ -112,46 +106,37 @@ if (isset($_GET['success'])) {
                             <a class="nav-link" href="EditaPerfil.php?id=<?php echo $_SESSION['id']; ?>"><img class="userImage" src="../Images/user.png"></a>
                         </li>
                     </ul>
+                    <!-- <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                <button class="btn btn-danger" type="submit">Buscar</button>
+              </form> -->
                 </div>
             </div>
         </nav>
     </header>
 
     <main role="main">
-        <div class="container marketing">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6 d-none d-sm-block">
-                        <div class="px-3 py-3 align-center" style='height:100vh'>
-                            <form action="Correo.php" method="POST">
-                                <h2>Contáctanos</h2>
-                                <p class="lead">¡Gracias por querer contactarte con nosotros! Por favor llena el siguiente formulario para que podamos ponernos en contacto contigo:</p>
-                                <div class="form-outline mb-4">
-                                    <label class="form-lg">Nombre</label>
-                                    <input type="text" id="name" class="form-control form-control-lg" name="name" />
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <label class="form-lg">Correo electrónico</label>
-                                    <input type="email" id="email" class="form-control form-control-lg" name="email" />
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    <label class="form-lg">Mensaje</label>
-                                    <textarea class="form-control form-control-lg" rows="4" name="message" id="message"></textarea>
-                                </div>
-
-                                <div class="form-outline mb-4 col-sm-6 d-none d-sm-block">
-                                    <button type="submit" class="btn btn-lg btn-block btn-danger mx-3">Enviar</button>
-                                    <button type="reset" class="btn btn-lg btn-block btn-outline-danger">Limpiar</button>
-                                </div>
-                            </form>
-                        </div>
+        <div class="container marketing align-items-center">
+            <div class="row align-items-center">
+                <div class='card'>
+                    <div class="col-lg-4">
+                        <img src="../Images/palomas.jpg" class="bd-placeholder-img rounded" preserveAspectRatio="xMidYMid slice" focusable="false" onclick="mostrarPromocion('prom1');">
                     </div>
-                    <div class="col-sm-6 d-none d-sm-block" style='height:100vh'>
-                        <div class="text-center">
-                            <img src="../Images/palomitas_icono.png" class="img-fluid">
-                        </div>
+                </div>
+                <div class='card'>
+                    <div class="col-lg-4">
+                        <img src="../Images/palomas2.jpg" class="bd-placeholder-img rounded" preserveAspectRatio="xMidYMid slice" focusable="false" onclick="mostrarPromocion('prom2');">
                     </div>
+                </div>
+                <div class="col-lg-4" id="prom1" style="display: none;">
+                    <h1>Vive la Magia de la copa Mundial de la FIFA con Coca-Cola</h1>
+                    <h3>Participa para vivir la magia y poder ganar premios mundialistas y uno de los viajes dobles a Catar 2022</h3>
+                    <p>Participa y consulta las bases <a href="https://magiadelacopa.com.mx/?utm_source=cinemex&utm_medium=web&utm_content=promo&utm_campaign=mundial2022" class="link-danger">haciendo click AQUÍ</a></p>
+                </div>
+                <div class="col-lg-4" id="prom2" style="display: none;">
+                    <h1>Descarga la app</h1>
+                    <h3>En esta temporada de grandes estrenos, no hagas filas</h3>
+                    <p>Haz <a href="#" class="link-danger">clic aquí</a></p>
                 </div>
             </div>
             <hr class="featurette-divider">
@@ -162,32 +147,6 @@ if (isset($_GET['success'])) {
         <p class="float-right"><a href="#" class="link-danger">Volver al inicio</a></p>
         <p>&copy; 2022 Company, Inc. &middot; <a href="#" class="link-danger">Privacidad</a> &middot; <a href="#" class="link-danger">Condiciones</a></p>
     </footer>
-
-    <script>
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault();
-
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            alert('El mensaje ha sido enviado correctamente.');
-                            $('form')[0].reset();
-                        } else {
-                            alert('Ha ocurrido un error al enviar el mensaje: ' + response.error);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Ha ocurrido un error al enviar el mensaje: ' + error);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

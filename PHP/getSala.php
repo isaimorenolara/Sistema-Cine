@@ -29,7 +29,12 @@
         echo "Los datos de las películas: ";
     else {
         $q = $_GET['q'];
-        $query = "SELECT * FROM salas where id_sala = '$q'";
+        $sala = $_GET['sala'];
+        $query = "SELECT * FROM funciones f , salas s WHERE f.id_sala = s.id_sala AND s.id_sala = '$sala' AND f.Id_Funcion = '$q'";
+        // select * from funciones f , salas s where f.id_sala = s.id_sala and s.id_sala = 4 and f.Id_Funcion = 5
+        // var_dump($query);
+        // echo "Funcion:".$q."<br>";
+        // echo "Sala:".$sala."<br>";
         $res = $mysqli->query($query) or
             die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
 
@@ -37,17 +42,22 @@
             $numero_asientos = $row['numero_asientos'];
             $numero_filas = $row['filas'];
 
+            
             // Generar las butacas
             echo '<div class="cinema-seats">';
             for ($fila = 1; $fila <= $numero_filas; $fila++) {
-                echo '<div class="row">';
+                $nombre_fila = chr(64 + $fila); // Convertir número de fila a carácter ASCII
+            
+                echo '<div class="row" data-row="' . $nombre_fila . '">';
                 for ($asiento = 1; $asiento <= $numero_asientos; $asiento++) {
-                    $nombre_butaca = chr(65 + $fila - 1) . $asiento;
-                    echo '<div class="seat" onclick="asientos(event.target)">' . $nombre_butaca . '</div>';
+                    $nombre_butaca = $nombre_fila . $asiento;
+                    echo '<div class="seat" data-column="' . $asiento . '" onclick="asientos(this)">' . $nombre_butaca . '</div>';
                 }
                 echo '</div>';
             }
             echo '</div>';
+            
+            
         }
     }
     $res->free();

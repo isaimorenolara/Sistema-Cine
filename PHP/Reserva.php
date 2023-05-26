@@ -1,37 +1,37 @@
 <?php
-    session_start();
+session_start();
 
-    // Verifica si la sesión está activa
-    if (isset($_SESSION['id'])) {
-        $id = $_SESSION['id'];
-    } else {
-        // Redirige al archivo de inicio de sesión si la sesión no está activa
-        header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
-        exit();
-    }
+// Verifica si la sesión está activa
+if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
+} else {
+    // Redirige al archivo de inicio de sesión si la sesión no está activa
+    header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+    exit();
+}
 
-    $mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
-    $acentos = $mysqli->query("SET NAMES 'utf8'");
+$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+$acentos = $mysqli->query("SET NAMES 'utf8'");
 
-    if ($mysqli->connect_errno)
-        echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+if ($mysqli->connect_errno)
+    echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
-    $query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
-    $resultado = $mysqli->query($query) or
-        die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
+$resultado = $mysqli->query($query) or
+    die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
 
-    // Verifica si se encontraron resultados
-    if (mysqli_num_rows($resultado) > 0) {
-        // Obtiene los datos del usuario
-        $row = mysqli_fetch_assoc($resultado);
-        $nombre = $row['Nombre'];
-        $email = $row['Correo_electronico'];
-    } else {
-        echo "No se encontró ningún usuario con ese ID.";
-    }
+// Verifica si se encontraron resultados
+if (mysqli_num_rows($resultado) > 0) {
+    // Obtiene los datos del usuario
+    $row = mysqli_fetch_assoc($resultado);
+    $nombre = $row['Nombre'];
+    $email = $row['Correo_electronico'];
+} else {
+    echo "No se encontró ningún usuario con ese ID.";
+}
 
-    // Cierra la conexión a la base de datos
-    $mysqli->close();
+// Cierra la conexión a la base de datos
+$mysqli->close();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -97,7 +97,9 @@
                             <a class="nav-link" aria-current="page" href="Inicio.php?id=<?php echo $_SESSION['id']; ?>">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="Promociones.html">Promociones</a>
+                            <a class="nav-link" href="Promociones.php?id=<?php echo $_SESSION['id']; ?>">Promociones</a>
+                        </li <li class="nav-item">
+                        <a class="nav-link" href="Peliculas.php?id=<?php echo $_SESSION['id']; ?>">Películas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="Reserva.php?id=<?php echo $_SESSION['id']; ?>">Reserva</a>
@@ -107,8 +109,8 @@
                                 Más
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="MiSala.html">Mi Sala</a></li>
-                                <li><a class="dropdown-item" href="Contacto.php">Contacto</a></li>
+                                <li><a class="dropdown-item" href="MisReservaciones.php?id=<?php echo $_SESSION['id']; ?>">Mis Reservaciones</a></li>
+                                <li><a class="dropdown-item" href="Contacto.php?id=<?php echo $_SESSION['id']; ?>">Contacto</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -126,7 +128,7 @@
             <form action="RegistraReservacion.php" method="post" enctype="multipart/form-data">
                 <div class="form-outline mb-4">
                     <label class="form-label">Funciones</label>
-                    <select class="form-select" name="funcion" required="required">
+                    <select class="form-select" name="funcion" required="required" onchange="limpiarAsientos(); mostrarSala(this)">
                         <?php
                         $mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
                         $acentos = $mysqli->query("SET NAMES 'utf8'");
@@ -141,7 +143,7 @@
                             die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
                         while ($registro = $res->fetch_assoc()) {
                             echo "<option hidden disabled selected value>&#160;</option>" .
-                                "<option value=\"" . $registro['Id_Funcion'] . "\">" . $registro['Nombre'] . " (Sala: " . $registro['tipo_sala'] . ", Fecha: " . $registro['Fecha'] . ", Hora: " . $registro['Hora_inicio'] . ") " . "</option>";
+                                "<option value=\"" . $registro['Id_Funcion'] . "\" data-sala=\"" . $registro['id_sala'] . "\">" . $registro['Nombre'] . " (Sala: " . $registro['tipo_sala'] . ", Fecha: " . $registro['Fecha'] . ", Hora: " . $registro['Hora_inicio'] . ") " . "</option>";
                         }
                         $res->free();
                         $mysqli->close();
@@ -167,28 +169,6 @@
                         <option value="PayPal credito">PayPal credito</option>
                     </select>
                 </div>
-                <div class="form-outline mb-4">
-                    <label class="form-label">Sala</label>
-                    <select class="form-select" name="sala" required="required" onchange="limpiarAsientos(); mostrarSala(this.value)">
-                        <?php
-                        $mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
-                        $acentos = $mysqli->query("SET NAMES 'utf8'");
-
-                        if ($mysqli->connect_errno) {
-                            echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-                        }
-
-                        $res = $mysqli->query("select * from salas") or
-                            die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
-                        while ($registro = $res->fetch_assoc()) {
-                            echo "<option hidden disabled selected value>&#160;</option>" .
-                                "<option value=\"" . $registro['id_sala'] . "\">" . $registro['tipo_sala'] . " (" . $registro['asientosxfila'] . " asientos) " . "</option>";
-                        }
-                        $res->free();
-                        $mysqli->close();
-                        ?>
-                    </select>
-                </div>
                 <!-- Visualización de los asientos -->
                 <div id="asientos-container" class="contenedorAsientos">
                     <!-- Aquí se creará la visualización de los asientos-->
@@ -198,6 +178,8 @@
                     <br>
                 </div>
                 <input type="hidden" id="id" name="id" value="<?php echo $_GET['id']; ?>">
+                <input type="hidden" id="fila" name="fila" value="">
+                <input type="hidden" id="columna" name="columna" value="">
                 <div class="form-outline mt-4 mb-4">
                     <button type="submit" class="btn btn-danger">Reservar</button>
                 </div>
@@ -209,27 +191,66 @@
             <p>&copy; 2022 Company, Inc. &middot; <a href="#" class="link-danger">Privacidad</a> &middot; <a href="#" class="link-danger">Condiciones</a></p>
         </footer>
         <script>
-            function asientos(seat) {
+            // function asientos(seat) {
 
+            //     const seats = document.querySelectorAll('.row .seat');
+            //     const asientosSeleccionados = document.querySelector('.asientos');
+
+            //     if (!seat.classList.contains('reserved')) {
+            //         seat.classList.toggle('selected');
+            //         console.log(`Asiento ${seat.textContent} ${seat.classList.contains('selected') ? 'seleccionado' : 'deseleccionado'}`);
+
+            //         // Agregamos el asiento seleccionado al div
+            //         if (seat.classList.contains('selected')) {
+            //             asientosSeleccionados.innerHTML += ` ${seat.textContent}`;
+            //         } else {
+            //             asientosSeleccionados.innerHTML = asientosSeleccionados.innerHTML.replace(` ${seat.textContent}`, '');
+            //         }
+            //     }
+            // }
+
+            // function limpiarAsientos() {
+            //     const asientosSeleccionados = document.querySelector('.asientos');
+            //     asientosSeleccionados.innerHTML = 'Asientos seleccionados:<br>';
+            // }
+            function asientos(seat) {
                 const seats = document.querySelectorAll('.row .seat');
                 const asientosSeleccionados = document.querySelector('.asientos');
+                const filaInput = document.getElementById('fila');
+                const columnaInput = document.getElementById('columna');
 
                 if (!seat.classList.contains('reserved')) {
-                    seat.classList.toggle('selected');
-                    console.log(`Asiento ${seat.textContent} ${seat.classList.contains('selected') ? 'seleccionado' : 'deseleccionado'}`);
-
-                    // Agregamos el asiento seleccionado al div
-                    if (seat.classList.contains('selected')) {
-                        asientosSeleccionados.innerHTML += ` ${seat.textContent}`;
-                    } else {
-                        asientosSeleccionados.innerHTML = asientosSeleccionados.innerHTML.replace(` ${seat.textContent}`, '');
+                    const selectedSeat = document.querySelector('.row .seat.selected');
+                    if (selectedSeat) {
+                        selectedSeat.classList.remove('selected');
+                        asientosSeleccionados.innerHTML = 'Asiento seleccionado:<br>';
                     }
+
+                    seat.classList.add('selected');
+                    console.log(`Asiento ${seat.textContent} seleccionado`);
+
+                    asientosSeleccionados.innerHTML = `Asiento seleccionado:<br> ${seat.textContent}`;
+
+                    // Obtener valores de fila y columna
+                    const fila = seat.parentNode.dataset.row;
+                    const columna = seat.dataset.column;
+
+                    // Actualizar los campos input hidden con los valores de fila y columna
+                    filaInput.value = fila;
+                    columnaInput.value = columna;
                 }
             }
 
+
+
             function limpiarAsientos() {
+                const selectedSeat = document.querySelector('.row .seat.selected');
+                if (selectedSeat) {
+                    selectedSeat.classList.remove('selected');
+                }
+
                 const asientosSeleccionados = document.querySelector('.asientos');
-                asientosSeleccionados.innerHTML = 'Asientos seleccionados:<br>';
+                asientosSeleccionados.innerHTML = 'Asiento seleccionado:<br>';
             }
         </script>
     </main>

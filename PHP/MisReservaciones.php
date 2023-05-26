@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // Verifica si la sesión está activa
@@ -11,14 +10,69 @@ if (isset($_SESSION['id'])) {
     exit();
 }
 
-if (isset($_GET['success'])) {
-    if ($_GET['success'] == 'true') {
-        echo '<div class="alert alert-success" role="alert">El mensaje ha sido enviado exitosamente.</div>';
-    } else {
-        $error = urldecode($_GET['error']);
-        echo '<div class="alert alert-danger" role="alert">Ha ocurrido un error al enviar el mensaje: ' . $error . '</div>';
-    }
+$mysqli = new mysqli("localhost", "root", "", "cine2"); //"127.0.0.1"
+$acentos = $mysqli->query("SET NAMES 'utf8'");
+
+if ($mysqli->connect_errno)
+    echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+
+$query = "SELECT * FROM usuarios WHERE Id_Usuario = '$id'";
+$resultado = $mysqli->query($query) or
+    die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+
+// Verifica si se encontraron resultados
+if (mysqli_num_rows($resultado) > 0) {
+    // Obtiene los datos del usuario
+    $row = mysqli_fetch_assoc($resultado);
+    $nombre = $row['Nombre'];
+    $email = $row['Correo_electronico'];
+} else {
+    echo "No se encontró ningún usuario con ese ID.";
 }
+
+header("Content-Type: text/html;charset=utf-8");
+
+
+$html = "";
+$cont = 0;
+$contador = 0;
+$res = $mysqli->query("select * from reservaciones r, funciones f, peliculas p where Id_Usuario = '$id' and r.Id_Funcion = f.Id_Funcion and f.Id_Pelicula = p.Id_Pelicula") or
+    die("Falló la consulta: (" . $mysqli->errno . ") " . $mysqli->error);
+$Nregistros = $res->num_rows;
+
+$html .= "<div class='table-responsive'>
+<table class='table table-striped'>
+    <tr class='text-center'>
+        <th>Poster</th>
+        <th>Nombre</th>
+        <th>Duración</th>
+        <th>Descripción</th>
+        <th>Idioma</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+    </tr>
+";
+
+while ($registro = $res->fetch_assoc()) {
+    $tipo = $registro['tipoimagen'];
+    $imagen = base64_encode($registro['Poster']);
+
+    $html .= "<tr>
+      <td class='text-center'><img class='rounded img-fluid' src='data:$tipo;base64,$imagen' alt='" . $registro['Nombre'] . "'></td>
+      <td class='text-center'>" . $registro['Nombre'] . "</td>
+      <td class='text-center'>" . $registro['Duracion'] . " min. </td>
+      <td class='text-justify'>" . $registro['Descripcion'] . "</td>
+      <td class='text-center'>" . $registro['Idioma'] . "</td>
+      <td class='text-center'>" . $registro['Fecha'] . "</td>
+      <td class='text-center'>" . $registro['Hora_inicio'] . "</td>
+  </tr>";
+    $cont++;
+    $contador++;
+}
+$html .= "</table></div>";
+
+// Cierra la conexión a la base de datos
+$mysqli->close();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,27 +91,10 @@ if (isset($_GET['success'])) {
     <link href="../CSS/estilos.css" rel="stylesheet" type="text/css">
     <link href="../CSS/carousel.css" rel="stylesheet">
 
+    <script src="../JS/funcionesInicio.js"></script>
+    <script src="../JS/funcionesAsientos2.js"></script>
+
     <style>
-        .userImage:hover {
-            filter: brightness(150%);
-        }
-
-        body {
-            padding-top: 5rem;
-            padding-bottom: 5rem;
-            color: #5a5a5a;
-        }
-
-        .featurette-divider {
-            margin: 3rem 0;
-        }
-
-        .featurette-heading {
-            font-weight: 300;
-            line-height: 1;
-            letter-spacing: -.05rem;
-        }
-
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -72,9 +109,19 @@ if (isset($_GET['success'])) {
                 font-size: 3.5rem;
             }
         }
+
+        .userImage:hover {
+            filter: brightness(150%);
+        }
+
+        .cajaPeliculas {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.232);
+            padding: 10px;
+        }
     </style>
 
-    <title>Contacto</title>
+    <title>Mis Reservaciones</title>
 </head>
 
 <body>
@@ -92,9 +139,8 @@ if (isset($_GET['success'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="Promociones.php?id=<?php echo $_SESSION['id']; ?>">Promociones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Peliculas.php?id=<?php echo $_SESSION['id']; ?>">Películas</a>
+                        </li <li class="nav-item">
+                        <a class="nav-link" href="Peliculas.php?id=<?php echo $_SESSION['id']; ?>">Películas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="Reserva.php?id=<?php echo $_SESSION['id']; ?>">Reserva</a>
@@ -118,76 +164,18 @@ if (isset($_GET['success'])) {
     </header>
 
     <main role="main">
-        <div class="container marketing">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6 d-none d-sm-block">
-                        <div class="px-3 py-3 align-center" style='height:100vh'>
-                            <form action="Correo.php" method="POST">
-                                <h2>Contáctanos</h2>
-                                <p class="lead">¡Gracias por querer contactarte con nosotros! Por favor llena el siguiente formulario para que podamos ponernos en contacto contigo:</p>
-                                <div class="form-outline mb-4">
-                                    <label class="form-lg">Nombre</label>
-                                    <input type="text" id="name" class="form-control form-control-lg" name="name" />
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <label class="form-lg">Correo electrónico</label>
-                                    <input type="email" id="email" class="form-control form-control-lg" name="email" />
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    <label class="form-lg">Mensaje</label>
-                                    <textarea class="form-control form-control-lg" rows="4" name="message" id="message"></textarea>
-                                </div>
-
-                                <div class="form-outline mb-4 col-sm-6 d-none d-sm-block">
-                                    <button type="submit" class="btn btn-lg btn-block btn-danger mx-3">Enviar</button>
-                                    <button type="reset" class="btn btn-lg btn-block btn-outline-danger">Limpiar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 d-none d-sm-block" style='height:100vh'>
-                        <div class="text-center">
-                            <img src="../Images/palomitas_icono.png" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="container marketing align-items-center mt-5">
+            <h2>Mis Reservaciones</h2>
+            <br>
+            <?= $html ?>
             <hr class="featurette-divider">
         </div>
+        <footer class="container">
+            <p class="float-right"><a href="#" class="link-danger">Volver al inicio</a></p>
+            <p>&copy; 2022 Company, Inc. &middot; <a href="#" class="link-danger">Privacidad</a> &middot; <a href="#" class="link-danger">Condiciones</a></p>
+        </footer>
+
     </main>
-
-    <footer class="container">
-        <p class="float-right"><a href="#" class="link-danger">Volver al inicio</a></p>
-        <p>&copy; 2022 Company, Inc. &middot; <a href="#" class="link-danger">Privacidad</a> &middot; <a href="#" class="link-danger">Condiciones</a></p>
-    </footer>
-
-    <script>
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault();
-
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            alert('El mensaje ha sido enviado correctamente.');
-                            $('form')[0].reset();
-                        } else {
-                            alert('Ha ocurrido un error al enviar el mensaje: ' + response.error);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Ha ocurrido un error al enviar el mensaje: ' + error);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

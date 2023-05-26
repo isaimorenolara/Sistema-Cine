@@ -33,7 +33,7 @@
 
 			switch($_SESSION['rol']){
 				case 'Administrador':
-					header("Location: http://localhost/pruebaCine/PHP/Lista.php");
+					header("Location: http://localhost/pruebaCine/PHP/InicioAdmi.php?id=".$_SESSION['id']);
 					exit();
 					break;
 				case 'Cliente':	

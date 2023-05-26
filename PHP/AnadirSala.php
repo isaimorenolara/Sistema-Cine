@@ -1,5 +1,17 @@
 <?php
-$asientosfilas = 0;
+
+session_start();
+
+// Verifica si la sesión está activa
+if (isset($_SESSION['id'])) {
+  $id = $_SESSION['id'];
+  $asientosfilas = 0;
+} else {
+  // Redirige al archivo de inicio de sesión si la sesión no está activa
+  header("Location: http://localhost/pruebaCine/PHP/Inicio.html");
+  exit();
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -58,7 +70,7 @@ $asientosfilas = 0;
 </head>
 
 <body>
-  <header>
+<header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">CinemaOps</a>
@@ -68,25 +80,25 @@ $asientosfilas = 0;
         <div class="collapse navbar-collapse" id="navbarDropdownMenuLink">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="Inicio.html">Inicio</a>
+              <a class="nav-link" aria-current="page" href="InicioAdmi.php?id=<?php echo $_SESSION['id']; ?>">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="Promociones.html">Promociones</a>
+              <a class="nav-link" href="Promociones_Admi.php?id=<?php echo $_SESSION['id']; ?>">Promociones</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="Peliculas.php">Películas</a>
+              <a class="nav-link" aria-current="page" href="PeliculasAdmi.php?id=<?php echo $_SESSION['id']; ?>">Películas</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="Catalogo.php">Catálogo</a>
+              <a class="nav-link" aria-current="page" href="CatalogoAdmi.php?id=<?php echo $_SESSION['id']; ?>">Catálogo</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Añadir
               </a>
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="AnadirPelicula.php">Añadir Pelicula</a></li>
-                <li><a class="dropdown-item" href="AnadirFunciones.php">Añadir Función</a></li>
-                <li><a class="dropdown-item" href="AnadirSala.php">Añadir Sala</a></li>
+                <li><a class="dropdown-item" href="AnadirPelicula.php?id=<?php echo $_SESSION['id']; ?>">Añadir Pelicula</a></li>
+                <li><a class="dropdown-item" href="AnadirFunciones.php?id=<?php echo $_SESSION['id']; ?>">Añadir Función</a></li>
+                <li><a class="dropdown-item" href="AnadirSala.php?id=<?php echo $_SESSION['id']; ?>">Añadir Sala</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -94,13 +106,14 @@ $asientosfilas = 0;
                 Lista
               </a>
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="Lista.php">Lista de Pelicula</a></li>
-                <li><a class="dropdown-item" href="FuncionesRegistradas.php">Lista de Funciones</a></li>
-                <li><a class="dropdown-item" href="UsuariosRegistrados.php">Lista de Usuarios</a></li>
+                <li><a class="dropdown-item" href="Lista.php?id=<?php echo $_SESSION['id']; ?>">Lista de Pelicula</a></li>
+                <li><a class="dropdown-item" href="FuncionesRegistradas.php?id=<?php echo $_SESSION['id']; ?>">Lista de Funciones</a></li>
+                <li><a class="dropdown-item" href="UsuariosRegistrados.php?id=<?php echo $_SESSION['id']; ?>">Lista de Usuarios</a></li>
+                <li><a class="dropdown-item" href="SalasRegistradas.php?id=<?php echo $_SESSION['id']; ?>">Lista de Salas</a></li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="InicioSesion.php"><img class="userImage" src="../Images/user.png"></a>
+              <a class="nav-link" href="EditaPerfilAdmi.php?id=<?php echo $_SESSION['id']; ?>"><img class="userImage" src="../Images/user.png"></a>
             </li>
           </ul>
         </div>

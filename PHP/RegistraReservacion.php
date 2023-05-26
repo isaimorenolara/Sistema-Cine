@@ -1,7 +1,9 @@
 <?php
     extract($_REQUEST);
+
+    //var_dump($_POST);
     
-    $query = "INSERT INTO reservaciones (Id_Usuario,Id_Funcion,Metodo_pago,Tipo) values ($id,$funcion,'$metodoPago','$tipoReservacion')";
+    $query = "INSERT INTO reservaciones (Id_Usuario,Id_Funcion,Metodo_pago,Tipo,asiento_fila,asiento_columna) values ($id,$funcion,'$metodoPago','$tipoReservacion','$fila',$columna)";
 
     $mysqli = new mysqli("localhost", "root", "", "cine2");//"127.0.0.1"
     $acentos = $mysqli->query("SET NAMES 'utf8'"); 
